@@ -7,7 +7,7 @@
 //  Modifie par : Vincent Ducharme, Hiver 2018
 //
 //  Devoir fait par
-//     Coéquipier 1 :
+//     Coéquipier 1 : Marcel Michel 17 081 685
 //     Coéquipier 2 :
 
 #ifndef mapImpl_h
@@ -21,8 +21,38 @@
 template <typename Tclef, typename Tvaleur>
 typename map<Tclef, Tvaleur>::iterator map<Tclef, Tvaleur>::lower_bound(const Tclef& c) const
 {
-    return iterator(nullptr);
+	int compteur = 0;
+	auto val = APRES->GAUCHE->CONTENU->first;
+	auto noeud = APRES->GAUCHE;
+	while (noeud->CONTENU->first != c)
+	{
+		if (c < noeud->CONTENU->first)
+		{
+			noeud = noeud->GAUCHE;
+			compteur++;
+		}
+		else if (c > noeud->CONTENU->first)
+		{
+			noeud = noeud->DROITE;
+			compteur++;
+		}
+		else if (c == noeud->CONTENU->first)
+			return iterator(noeud);
+		else if(compteur == SIZE)
+		{
+			break;
+		}
+	}
+	//auto smeg = APRES->GAUCHE->CONTENU->first;
+	//if(c == APRES->GAUCHE->CONTENU->first)
+	//	return iterator(APRES->GAUCHE);
+	//else
+	//{
+
+	//}
+	return iterator(noeud);
 }
+
 
 ///////////////////////////////////////////////////////////////////////////
 //erase a partir d'une position
