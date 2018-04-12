@@ -22,11 +22,14 @@ template <typename Tclef, typename Tvaleur>
 typename map<Tclef, Tvaleur>::iterator map<Tclef, Tvaleur>::lower_bound(const Tclef& c) const
 {
 	int compteur = 0;
-	auto val = APRES->GAUCHE->CONTENU->first;
 	auto noeud = APRES->GAUCHE;
 	while (noeud->CONTENU->first != c)
 	{
-		if (c < noeud->CONTENU->first)
+		if (compteur == SIZE)
+		{
+			break;
+		}
+		else if (c < noeud->CONTENU->first)
 		{
 			noeud = noeud->GAUCHE;
 			compteur++;
@@ -38,18 +41,8 @@ typename map<Tclef, Tvaleur>::iterator map<Tclef, Tvaleur>::lower_bound(const Tc
 		}
 		else if (c == noeud->CONTENU->first)
 			return iterator(noeud);
-		else if(compteur == SIZE)
-		{
-			break;
-		}
-	}
-	//auto smeg = APRES->GAUCHE->CONTENU->first;
-	//if(c == APRES->GAUCHE->CONTENU->first)
-	//	return iterator(APRES->GAUCHE);
-	//else
-	//{
 
-	//}
+	}
 	return iterator(noeud);
 }
 
@@ -60,9 +53,9 @@ typename map<Tclef, Tvaleur>::iterator map<Tclef, Tvaleur>::lower_bound(const Tc
 template <typename Tclef, typename Tvaleur>
 typename map<Tclef, Tvaleur>::iterator map<Tclef, Tvaleur>::erase(iterator i)
 {
-    assert(i!=end());
-    erase(i++->first);
-    return i;
+	assert(i != end());
+	erase(i++->first);
+	return i;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -71,7 +64,7 @@ typename map<Tclef, Tvaleur>::iterator map<Tclef, Tvaleur>::erase(iterator i)
 template <typename Tclef, typename Tvaleur>
 typename map<Tclef, Tvaleur>::iterator map<Tclef, Tvaleur>::insert(iterator j, const Tclef& c)
 {
-    return insert(c).first;
+	return insert(c).first;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -82,12 +75,36 @@ typename map<Tclef, Tvaleur>::iterator map<Tclef, Tvaleur>::insert(iterator j, c
 template <typename Tclef, typename Tvaleur>
 void map<Tclef, Tvaleur>::rotation_gauche_droite(noeud*& p)
 {
+	noeud *temp = p->GAUCHE;
+	int ia = temp->INDICE;
+	int ib = p->INDICE;
+	int nib = -ia - std::max(0, -ia) - 1 + ib;
+	int nia = ia - std::max(0, -nib) - 1;
+	temp->INDICE = nia;
+	p->INDICE = nib;
+	p->GAUCHE = temp->DROITE;
+	temp->DROITE->PARENT = p->GAUCHE;
+	temp->DROITE = p;
+	temp->DROITE->PARENT = p->PARENT;
+	p = temp;
 }
 
 //effectuer une rotation simple de la droite vers la gauche
 template <typename Tclef, typename Tvaleur>
 void map<Tclef, Tvaleur>::rotation_droite_gauche(noeud*& p)
 {
+	noeud *temp = p->DROITE;
+	int ia = temp->INDICE;
+	int ib = p->INDICE;
+	int nib = -ia - std::max(0, -ia) - 1 + ib;
+	int nia = ia - std::max(0, -nib) - 1;
+	temp->INDICE = nia;
+	p->INDICE = nib;
+	p->DROITE = temp->GAUCHE;
+	temp->GAUCHE->PARENT = p->DROITE;
+	temp->GAUCHE = p;
+	temp->GAUCHE->PARENT = p->PARENT;
+	p = temp;
 }
 
 
