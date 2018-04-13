@@ -75,6 +75,29 @@ template <typename TYPE,typename classe_de_dispersion>
 size_t unordered_multiset<TYPE, classe_de_dispersion>::erase(const TYPE& VAL)
 {
     size_t nb=0;
+
+    size_t size = REP.size() - 1;
+    size_t alv = disperseur(VAL) % size;
+    if (REP[alv] == nullptr)
+        return 0;
+    list<TYPE> *newList = new list<TYPE>();
+    for (auto v : *REP[alv])
+        if (v == VAL) nb++;
+        else newList->push_back(v);
+    delete REP[alv];
+    if (newList->size() > 0)
+        REP[alv] = newList;
+    else
+        REP[alv] = nullptr;
+    SIZE -= nb;
+
+    double avg = (double)SIZE / (double)size;
+    if (facteur_min > avg)
+    {
+        size_t newSize = (size -1) /2;
+        rehash(newSize);
+    }
+
     return nb;
 }
 
@@ -82,6 +105,7 @@ template <typename TYPE,typename classe_de_dispersion>
 typename unordered_multiset<TYPE, classe_de_dispersion>::iterator
 unordered_multiset<TYPE, classe_de_dispersion>::erase(typename unordered_multiset<TYPE, classe_de_dispersion>::iterator i)
 {
+    (*i.ALV)->erase(i.POS);
     return i;
 }
 
