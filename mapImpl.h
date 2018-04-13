@@ -82,10 +82,13 @@ void map<Tclef, Tvaleur>::rotation_gauche_droite(noeud*& p)
 	int nia = ia - std::max(0, -nib) - 1;
 	temp->INDICE = nia;
 	p->INDICE = nib;
+
 	p->GAUCHE = temp->DROITE;
-	temp->DROITE->PARENT = p->GAUCHE;
+	if (p->GAUCHE != nullptr)
+		p->GAUCHE->PARENT = p;
 	temp->DROITE = p;
-	temp->DROITE->PARENT = p->PARENT;
+	temp->PARENT = p->PARENT;
+	p->PARENT = temp;
 	p = temp;
 }
 
@@ -94,16 +97,23 @@ template <typename Tclef, typename Tvaleur>
 void map<Tclef, Tvaleur>::rotation_droite_gauche(noeud*& p)
 {
 	noeud *temp = p->DROITE;
-	int ia = temp->INDICE;
-	int ib = p->INDICE;
-	int nib = -ia - std::max(0, -ia) - 1 + ib;
-	int nia = ia - std::max(0, -nib) - 1;
-	temp->INDICE = nia;
-	p->INDICE = nib;
+//	int ia = temp->INDICE;
+//	int ib = p->INDICE;
+//	int nib = -ia - std::max(0, -ia) - 1 + ib;
+//	int nia = ia - std::max(0, -nib) - 1;
+	int ia = p->INDICE;
+	int ib = temp->INDICE;
+	int nia = ia + std::max(0, -ib) +1;
+	int nib = ib + nia + std::max(0, -nia) +1;
+	temp->INDICE = nib;
+	p->INDICE = nia;
+
 	p->DROITE = temp->GAUCHE;
-	temp->GAUCHE->PARENT = p->DROITE;
+	if (p->DROITE != nullptr)
+		p->DROITE->PARENT = p;
 	temp->GAUCHE = p;
-	temp->GAUCHE->PARENT = p->PARENT;
+	temp->PARENT = p->PARENT;
+	p->PARENT = temp;
 	p = temp;
 }
 
