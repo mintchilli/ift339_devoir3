@@ -8,7 +8,7 @@
 //
 //  Devoir fait par
 //     Coéquipier 1 : Marcel Michel 17 081 685
-//     Coéquipier 2 :
+//     Coéquipier 2 : Hugo Truchon 17 078 127
 
 #ifndef mapImpl_h
 #define mapImpl_h
